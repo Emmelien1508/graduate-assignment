@@ -1,24 +1,46 @@
+require('dotenv').config();
 const express = require('express');
-const app = express();
-const port = process.env.PORT || 3000;
 const mongoose = require('mongoose');
-const Task = require('./api/models/taskModel'); //created model loading here
-const bodyParser = require('body-parser');
-  
-// mongoose instance connection url connection
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+
+const Task = require('./models/taskModel');
+const indexRouter = require('./routes/index');
+const apiRouter = require('./routes/api/taskRouteCorrectAnswers');
+
+// connect to db
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/Tododb'); 
+mongoose.connect('mongodb://localhost:27017/Tododb'); 
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// init express
+var app = express();
 
-var indexRouter = require('./routes/index');
-const routes = require('./routes/api/taskRoute');
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-//register the route
-routes(app);
-indexRouter(app);
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
-app.listen(port);
+// set up routes and routers
+app.use('/', indexRouter);
+app.use('/static', express.static(path.join(__dirname, 'public')));
+app.use('/api/tasks', apiRouter);
 
-console.log('todo list RESTful API server started on: ' + port);
+// catch any remaining routing errors 
+// error handler
+app.use(function(error, request, response, next) {
+    // set locals, only providing error in development
+    response.locals.message = error.message;
+    response.locals.error = request.app.get('env') === 'development' ? error : {};
+  
+    // render the error page
+    response.status(error.status || 500);
+    response.render('error');
+});
+
+module.exports = app;
