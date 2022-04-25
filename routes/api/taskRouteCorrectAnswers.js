@@ -19,66 +19,68 @@ router.use((req, res, next) => {
 
 // read all
 router.get('/', (req, res, next) => {
-  TaskService.list()
-  .then((tasks) => {
-    res.status(200);
-    res.json(tasks);
-  });
+  const tasks = TaskService.list();
+  res.status(200);
+  res.json(tasks);
 })
 
 // read one
 router.get('/:taskid', (req, res, next) => {
   const id = req.params.taskid;
-  TaskService.get(id)
-  .then((task) => {
+  const task = TaskService.get(id);
+  if (task) {
     res.status(200);
     res.json(task);
-  })
-  .catch((error) => {
-    response.status(404);
-    response.end();
-  })
+  } else {
+    res.status(404);
+    res.end();
+  }
 })
 
 // update
 router.put('/:taskid', (req, res, next) => {
   const id = req.params.taskid;
   const data = req.body;
-  TaskService.update(id, data)
-  .then((task) => {
+  const updatedTask = TaskService.update(id, data);
+  if (updatedTask) {
     res.status(200);
-    res.json(task);
-  })
+    res.json(updatedTask)
+  } else {
+    res.status(404);
+    res.end();
+  }
 })
 
 // post
 router.post('/', async (req, res, next) => {
   const task = {
-    name: req.body.name
+    _id: req.body._id,
+    name: req.body.name,
+    createdDate: req.body.createdDate,
+    status: req.body.status
   }
 
-  try {
-    const taskSave = await TaskService.create(task);
+  const taskSave = TaskService.create(task);
+  if (taskSave) {
     res.status(201);
     res.json(taskSave);
-  } 
-  catch(error) {
-    console.log(error);  
+  } else {
+    res.status(404);
+    res.end();
   }
 })
 
 // delete
 router.delete('/:taskid', (req, res, next) => {
   const id = req.params.taskid;
-  TaskService.delete(id)
-  .then((task) => {
-    res.send(200);
-    res.json(task);
-  })
-  .catch((error) => {
-    res.status(404)
+  const deletedTask = TaskService.delete(id);
+  if (deletedTask) {
+    res.status(200);
+    res.json(deletedTask);
+  } else {
+    res.status(404);
     res.end();
-  })
+  }
 })
 
 // error handling

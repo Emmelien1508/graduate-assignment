@@ -1,4 +1,4 @@
-const baseURL;
+let baseURL;
 document.addEventListener('DOMContentLoaded', () => {
   baseURL = window.location.origin;
   document.querySelector('.test').addEventListener('click', ()=>{
@@ -7,68 +7,75 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function testAPIs() {
-  console.log("Testing the APIs");
-  
-  // list
-  callAPI('GET', '/api/tasks', null) 
-  .then((tasks) => {
-    console.log(" ");
-    console.log("GET ALL");
-    console.log("All tasks:");
-    console.log(tasks);
+    console.log("Testing the APIs");
     
-    // create
-    let data = { 
-      "title": "TestTitle", 
-      "author": "TestAuthor",
-      "category": "TestCategory",
-      "content": "TestContent"
-    }
-    callAPI('POST', '/api/tasks', data)
-    .then((task) => {
-      const savedtask = task;
-      console.log(" ");
-      console.log("POST")
-      console.log("Created new task:");
-      console.log(task);
-
-      // find
-      callAPI('GET', `/api/tasks/${savedtask._id}`, null)
-      .then((task) => {
+    // list all tasks before api calls
+    callAPI('GET', '/api/tasks', null) 
+    .then((tasks) => {
         console.log(" ");
-        console.log("GET ONE")
-        console.log("Found task:");
-        console.log(task);
-
-        // update
-        let changedData = {
-          "title": "TestTitleChanged", 
-          "author": "TestAuthorChanged",
-          "category": "TestCategoryChanged",
-          "content": "TestContentChanged"
+        console.log("All tasks before the four CRUD operations:");
+        console.log(tasks);
+        
+        // create
+        let data = { 
+            "_id": 4, 
+            "name": "Walk the dog",
+            "createdDate": "04/24/2022",
+            "status": "pending"
         }
-        callAPI('PUT', `/api/tasks/${savedtask._id}`, changedData)
+        callAPI('POST', '/api/tasks', data)
         .then((task) => {
-          console.log(" ");
-          console.log("PUT")
-          console.log("Updated task:")
-          console.log(task);
-
-          // delete
-          callAPI('DELETE', `/api/tasks/${savedtask._id}`, null)
-          .then((result) => {
+            const savedtask = task;
             console.log(" ");
-            console.log("DELETE")
-            console.log("Result from delete:");
-            console.log(result);
-          })
+            console.log("POST")
+            console.log("Created new task:");
+            console.log(task);
+
+            // find
+            callAPI('GET', `/api/tasks/${savedtask._id}`, null)
+            .then((task) => {
+                console.log(" ");
+                console.log("GET ONE")
+                console.log("Found task:");
+                console.log(task);
+
+                // update
+                let changedData = {
+                    "_id": 4, 
+                    "name": "Walk the dog",
+                    "createdDate": "04/24/2022",
+                    "status": "completed"
+                }
+                callAPI('PUT', `/api/tasks/${savedtask._id}`, changedData)
+                .then((task) => {
+                    console.log(" ");
+                    console.log("PUT")
+                    console.log("Updated task:")
+                    console.log(task);
+
+                    // delete
+                    callAPI('DELETE', `/api/tasks/${savedtask._id}`, null)
+                    .then((result) => {
+                        console.log(" ");
+                        console.log("DELETE")
+                        console.log("Result from delete:");
+                        console.log(result);
+
+                        // list all tasks after api calls
+                        callAPI('GET', '/api/tasks', null) 
+                        .then((tasks) => {
+                            console.log(" ");
+                            console.log("All tasks after the four CRUD operations:");
+                            console.log(tasks);
+                        })
+                    })
+                })
+            })
         })
-      })
     })
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+    .catch((error) => {
+        console.log(error);
+    })
 }
 
 async function callAPI(method, uri, body) {
@@ -84,7 +91,7 @@ async function callAPI(method, uri, body) {
         }
         if (method == 'POST' || method == 'PUT') {
             options.body = JSON.stringify(body);
-        }
+        } 
         var response = await fetch(baseURL + uri, options)
         return response.json();
     } catch(error) {

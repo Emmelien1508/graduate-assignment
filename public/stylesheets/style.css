@@ -1,0 +1,185 @@
+:root {
+    --black: #000;
+    --white: #fff;
+    --accent1: #2B394A;
+    --accent2: #FDA5A4;
+    --accent3: #C5D0DD;
+    --border-radius: 3px;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: 'Martel', serif;
+    font-weight: 400;
+    color: var(--black);
+    background-color: var(--white);
+    letter-spacing: -1px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Karla', sans-serif;
+    font-weight: 700;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    padding: 50px;
+    width: 100vw;
+    min-height: 100vh;
+}
+
+.rounded {
+    border-radius: calc(3 * var(--border-radius));
+}
+
+a {
+    text-decoration: none;
+}
+/* flex */
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+.centered {
+    justify-content: center;
+    align-items: center;
+}
+
+/* spacing */
+.space-xs {
+    padding: 2vw;
+}
+
+.space-xxs-tb {
+    padding: 1vw 0;
+}
+
+/* text */
+.text-xs {
+    font-size: 0.75rem;
+}
+
+/* background */
+.bg-accent3 {
+    background-color: var(--accent3);
+}
+
+/* form */
+input, select, textarea {
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: -1px;
+    padding: 10px 5px;
+    margin-bottom: 10px;
+    background-color: var(--white);
+    border: none;
+    outline: none;
+    border-radius: var(--border-radius);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    transition: all 0.25s ease-in-out;
+}
+
+input:focus, select:focus, textarea:focus {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+button {
+    font-family: 'Karla', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    background-color: var(--accent1);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    margin: 5px 0;
+    outline: none;
+    border-radius: var(--border-radius);
+    transition: all 0.25s ease-in-out;
+}
+
+button:hover {
+    background-color: var(--accent3);
+    color: var(--black);
+    cursor: pointer;
+}
+
+.blog-card-button:hover {
+    background-color: var(--accent2);
+}
+
+/* blog overview */
+.blogs {
+    display: grid;
+    grid-template-columns: repeat(4, 20vw);
+    column-gap: 20px;
+    row-gap: 20px;
+}
+
+.blog-card {
+    background-color: var(--accent3);
+    padding: 20px;
+    border-radius: calc(1.5 * var(--border-radius));
+    position: relative;
+    color: var(--black);
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.blog-card:hover {
+    background-color: var(--accent1);
+    color: var(--white);
+    cursor: pointer;
+}
+
+.blog-card-content {
+    width: 100%;
+    height: 100%;
+}
+
+.blog-card-category {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
+    background-color: var(--accent2);
+    padding: 4px 8px;
+    color: var(--black);
+    border-top-right-radius: calc(1.5 * var(--border-radius));
+    border-bottom-left-radius: calc(1.5 * var(--border-radius));
+}
+
+/* single blog */
+.blog {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+}  
+
+.blog-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 1vw 5vw; 
+}

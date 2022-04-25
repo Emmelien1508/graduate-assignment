@@ -5,13 +5,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const Task = require('./models/taskModel');
 const indexRouter = require('./routes/index');
-const apiRouter = require('./routes/api/taskRouteCorrectAnswers');
-
-// connect to db
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/Tododb'); 
+const apiRouter = require('./routes/api/taskRoute');
 
 // init express
 var app = express();
@@ -24,7 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set('view engine', 'jade');
 
 // set up routes and routers
 app.use('/', indexRouter);
@@ -43,4 +38,6 @@ app.use(function(error, request, response, next) {
     response.render('error');
 });
 
-module.exports = app;
+app.listen(3000, () => {
+    console.log("App listening on http://localhost:3000");
+})
